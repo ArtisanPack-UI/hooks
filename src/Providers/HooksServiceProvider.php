@@ -1,6 +1,6 @@
 <?php
 
-namespace ArtisanPackUI\Hooks;
+namespace ArtisanPackUI\Hooks\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

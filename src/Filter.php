@@ -80,11 +80,11 @@ class Filter
 		ksort($this->filters[$hook]);
 		$callbacks = array_merge(...$this->filters[$hook]);
 
-		// Prepend the value to the arguments array for the callbacks.
 		$allArgs = array_merge([$value], $args);
 
 		foreach ($callbacks as $callback) {
-			$value = call_user_func_array($callback, $allArgs);
+			// Use the splat operator for the call.
+			$value = $callback(...$allArgs);
 			// Update the value for the next callback in the chain.
 			$allArgs[0] = $value;
 		}

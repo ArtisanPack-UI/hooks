@@ -10,8 +10,8 @@
 
 namespace Tests;
 
-use ArtisanPackUI\Hooks\BladeDirectiveServiceProvider;
-use ArtisanPackUI\Hooks\HooksServiceProvider;
+use ArtisanPackUI\Hooks\Providers\BladeDirectiveServiceProvider;
+use ArtisanPackUI\Hooks\Providers\HooksServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 /**
@@ -34,6 +34,10 @@ class TestCase extends Orchestra
 		// This line is absolutely essential. It tells Orchestra Testbench
 		// to build the temporary Laravel application and create $this->app.
 		parent::setUp();
+		
+		// Manually register singletons to ensure they work correctly in tests
+		$this->app->singleton(\ArtisanPackUI\Hooks\Action::class);
+		$this->app->singleton(\ArtisanPackUI\Hooks\Filter::class);
 	}
 
 	/**

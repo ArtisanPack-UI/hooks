@@ -9,7 +9,7 @@
  * @since      1.0.0
  */
 
-namespace ArtisanPackUI\Hooks;
+namespace ArtisanPackUI\Hooks\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;

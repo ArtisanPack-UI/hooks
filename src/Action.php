@@ -81,7 +81,7 @@ class Action
 		$callbacks = array_merge(...$this->actions[$hook]);
 
 		foreach ($callbacks as $callback) {
-			call_user_func_array($callback, $args);
+			$callback(...$args);
 		}
 	}
 }
