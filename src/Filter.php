@@ -42,7 +42,7 @@ class Filter
 	 *
 	 * @param Container $app The application container.
 	 */
-	public function __construct(Container $app)
+	public function __CONSTRUCT(Container $app)
 	{
 		$this->app = $app;
 	}
@@ -71,7 +71,7 @@ class Filter
 	 * @param mixed  ...$args  Optional. Additional arguments to pass to the callbacks.
 	 * @return mixed The filtered value.
 	 */
-	public function apply(string $hook, mixed $value, ...$args): mixed
+	public function apply(string $hook, mixed $value, mixed ...$args): mixed
 	{
 		if (!isset($this->filters[$hook])) {
 			return $value;

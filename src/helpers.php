@@ -39,7 +39,7 @@ if (! function_exists('doAction')) {
 	 * @param string $hook     The name of the action to execute.
 	 * @param mixed  ...$args Optional. The arguments to pass to the callbacks.
 	 */
-	function doAction(string $hook, ...$args): void
+	function doAction(string $hook, mixed ...$args): void
 	{
 		Action::do($hook, ...$args);
 	}
@@ -74,7 +74,7 @@ if (! function_exists('applyFilters')) {
 	 * @param mixed  ...$args Optional. Additional arguments to pass to the callbacks.
 	 * @return mixed The filtered value.
 	 */
-	function applyFilters(string $hook, mixed $value, ...$args): mixed
+	function applyFilters(string $hook, mixed $value, mixed ...$args): mixed
 	{
 		return Filter::apply($hook, $value, ...$args);
 	}

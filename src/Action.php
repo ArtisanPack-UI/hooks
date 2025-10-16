@@ -44,7 +44,7 @@ class Action
 	 *
 	 * @param Container $app The application container.
 	 */
-	public function __construct(Container $app)
+	public function __CONSTRUCT(Container $app)
 	{
 		$this->app = $app;
 	}
@@ -71,7 +71,7 @@ class Action
 	 * @param string $hook     The name of the action to execute.
 	 * @param mixed  ...$args Optional. The arguments to pass to the callbacks.
 	 */
-	public function do(string $hook, ...$args): void
+	public function do(string $hook, mixed ...$args): void
 	{
 		if (!isset($this->actions[$hook])) {
 			return;
