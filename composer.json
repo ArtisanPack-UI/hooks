@@ -29,11 +29,16 @@
   },
   "require-dev": {
     "pestphp/pest": "^3.8",
-    "pestphp/pest-plugin-laravel": "^3.1"
+    "pestphp/pest-plugin-laravel": "^3.1",
+    "artisanpack-ui/code-style": "^1.0",
+    "squizlabs/php_codesniffer": "^3.13",
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.1",
+    "orchestra/testbench": "^10.6"
   },
   "config": {
     "allow-plugins": {
-      "pestphp/pest-plugin": true
+      "pestphp/pest-plugin": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
     }
   },
   "extra": {
@@ -45,5 +50,8 @@
         "Hooks": "ArtisanPackUI\\Hooks\\Facades\\Hooks"
       }
     }
+  },
+  "scripts": {
+    "test": "./vendor/bin/pest"
   }
 }
