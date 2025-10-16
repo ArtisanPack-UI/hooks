@@ -1,8 +1,8 @@
 {
   "name": "artisanpack-ui/hooks",
-  "description": "hooks name",
+  "description": "WordPress-style actions and filters for Laravel, with Blade directives and helper functions.",
   "type": "library",
-  "license": "GPL-3.0-or-later",
+  "license": "MIT",
   "version": "1.0.0",
   "autoload": {
     "psr-4": {
