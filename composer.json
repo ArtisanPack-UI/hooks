@@ -1,0 +1,49 @@
+{
+  "name": "artisanpack-ui/hooks",
+  "description": "hooks name",
+  "type": "library",
+  "license": "GPL-3.0-or-later",
+  "version": "1.0.0",
+  "autoload": {
+    "psr-4": {
+      "ArtisanPackUI\\Hooks\\": "src/"
+    },
+    "files": [
+      "src/helpers.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Jacob Martella",
+      "email": "me@jacobmartella.com"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "illuminate/support": ">=5.3"
+  },
+  "require-dev": {
+    "pestphp/pest": "^3.8",
+    "pestphp/pest-plugin-laravel": "^3.1"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "ArtisanPackUI\\Hooks\\HooksServiceProvider"
+      ],
+      "aliases": {
+        "Hooks": "ArtisanPackUI\\Hooks\\Facades\\Hooks"
+      }
+    }
+  }
+}
