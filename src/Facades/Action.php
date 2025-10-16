@@ -1,0 +1,38 @@
+<?php
+/**
+ * Action Facade
+ *
+ * Provides a static-like interface to the Action service.
+ *
+ * @package    ArtisanPackUI\Hooks
+ * @subpackage ArtisanPackUI\Hooks\Facades
+ * @since      1.0.0
+ *
+ * @method static void add(string $hook, callable $callback, int $priority = 10)
+ * @method static void do(string $hook, ...$args)
+ */
+
+namespace ArtisanPackUI\Hooks\Facades;
+
+use ArtisanPackUI\Hooks\Action as ActionManager;
+use Illuminate\Support\Facades\Facade;
+
+/**
+ * Provides static access to the Action manager.
+ *
+ * @since 1.0.0
+ */
+class Action extends Facade
+{
+	/**
+	 * Get the registered name of the component.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	protected static function getFacadeAccessor(): string
+	{
+		return ActionManager::class;
+	}
+}

@@ -44,10 +44,12 @@
   "extra": {
     "laravel": {
       "providers": [
-        "ArtisanPackUI\\Hooks\\HooksServiceProvider"
+        "ArtisanPackUI\\Hooks\\Providers\\HooksServiceProvider",
+        "ArtisanPackUI\\Hooks\\Providers\\BladeDirectiveServiceProvider"
       ],
       "aliases": {
-        "Hooks": "ArtisanPackUI\\Hooks\\Facades\\Hooks"
+        "Action": "ArtisanPackUI\\Hooks\\Facades\\Action",
+        "Filter": "ArtisanPackUI\\Hooks\\Facades\\Filter"
       }
     }
   },

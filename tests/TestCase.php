@@ -10,6 +10,7 @@
 
 namespace Tests;
 
+use ArtisanPackUI\Hooks\BladeDirectiveServiceProvider;
 use ArtisanPackUI\Hooks\HooksServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -49,6 +50,7 @@ class TestCase extends Orchestra
 	{
 		return [
 			HooksServiceProvider::class,
+			BladeDirectiveServiceProvider::class,
 		];
 	}
 }

@@ -1,71 +1,81 @@
 <?php
+/**
+ * Helper functions for the Hooks package.
+ *
+ * Provides easy access to the Action and Filter managers, using a
+ * camelCase naming convention for modern PHP development.
+ *
+ * @package    ArtisanPackUI\Hooks
+ * @since      1.0.0
+ */
 
-use ArtisanPackUI\Hooks\A11y;
+use ArtisanPackUI\Hooks\Facades\Action;
+use ArtisanPackUI\Hooks\Facades\Filter;
 
-if ( !function_exists( 'a11y' ) ) {
+if (! function_exists('addAction')) {
 	/**
-	 * Get the Eventy instance.
+	 * Adds a callback to a specific action hook.
 	 *
-	 * @return A11y
+	 * @since 1.0.0
+	 * @uses \ArtisanPackUI\Hooks\Facades\Action::add()
+	 *
+	 * @param string   $hook     The name of the action.
+	 * @param callable $callback The callback to be executed.
+	 * @param int      $priority Optional. The priority of the callback. Default 10.
 	 */
-	function a11y()
+	function addAction(string $hook, callable $callback, int $priority = 10): void
 	{
-		return app( 'a11y' );
+		Action::add($hook, $callback, $priority);
 	}
 }
 
-if ( !function_exists( 'a11yCSSVarBlackOrWhite' ) ) {
+if (! function_exists('doAction')) {
 	/**
-	 * Returns whether a text color should be black or white based on the background color.
+	 * Executes all registered callbacks for a given action.
 	 *
-	 * @param string $hexColor The hex code for the background color.
-	 * @return string
 	 * @since 1.0.0
+	 * @uses \ArtisanPackUI\Hooks\Facades\Action::do()
+	 *
+	 * @param string $hook     The name of the action to execute.
+	 * @param mixed  ...$args Optional. The arguments to pass to the callbacks.
 	 */
-	function a11yCSSVarBlackOrWhite( string $hexColor ): string
+	function doAction(string $hook, ...$args): void
 	{
-		return a11y()->a11yCSSVarBlackOrWhite( $hexColor );
+		Action::do($hook, ...$args);
 	}
 }
 
-if ( !function_exists( 'a11yGetContrastColor' ) ) {
+if (! function_exists('addFilter')) {
 	/**
-	 * Returns whether a text color should be black or white based on the background color.
+	 * Adds a callback to a specific filter hook.
 	 *
-	 * @param string $hexColor The hex code for the background color.
-	 * @return string
 	 * @since 1.0.0
+	 * @uses \ArtisanPackUI\Hooks\Facades\Filter::add()
+	 *
+	 * @param string   $hook     The name of the filter.
+	 * @param callable $callback The callback to be executed.
+	 * @param int      $priority Optional. The priority of the callback. Default 10.
 	 */
-	function a11yGetContrastColor( string $hexColor ): string
+	function addFilter(string $hook, callable $callback, int $priority = 10): void
 	{
-		return a11y()->a11yGetContrastColor( $hexColor );
+		Filter::add($hook, $callback, $priority);
 	}
 }
 
-if ( !function_exists( 'getToastDuration' ) ) {
+if (! function_exists('applyFilters')) {
 	/**
-	 * Gets the user's setting for how long the toast element should stay on the screen.
+	 * Applies all registered callbacks to a filter.
 	 *
-	 * @return float|int
 	 * @since 1.0.0
-	 */
-	function getToastDuration(): float|int
-	{
-		return a11y()->getToastDuration();
-	}
-}
-
-if ( !function_exists( 'a11yCheckContrastColor' ) ) {
-	/**
-	 * Returns whether two given colors have the correct amount of contrast between them.
+	 * @uses \ArtisanPackUI\Hooks\Facades\Filter::apply()
 	 *
-	 * @param string $firstHexColor  The first color to check.
-	 * @param string $secondHexColor The second color to check.
-	 * @return bool
-	 * @since 1.0.0
+	 * @param string $hook     The name of the filter to apply.
+	 * @param mixed  $value    The initial value to be filtered.
+	 * @param mixed  ...$args Optional. Additional arguments to pass to the callbacks.
+	 * @return mixed The filtered value.
 	 */
-	function a11yCheckContrastColor( string $firstHexColor, string $secondHexColor ): bool
+	function applyFilters(string $hook, mixed $value, ...$args): mixed
 	{
-		return a11y()->a11yCheckContrastColor( $firstHexColor, $secondHexColor );
+		return Filter::apply($hook, $value, ...$args);
 	}
 }
