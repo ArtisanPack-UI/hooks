@@ -88,6 +88,9 @@ class Action
 	/**
 	 * Removes a specific callback from an action hook.
 	 *
+	 * Note: The callback must be the exact same reference (===) that was registered.
+	 * Anonymous functions or recreated callables will not match even if functionally identical.
+	 *
 	 * @since 1.1.0
 	 *
 	 * @param string   $hook     The name of the action.
@@ -131,12 +134,19 @@ class Action
 			return false;
 		}
 
-		if (false !== $priority && isset($this->actions[$hook][$priority])) {
-			unset($this->actions[$hook][$priority]);
-		} elseif (false === $priority) {
-			unset($this->actions[$hook]);
+		// A specific priority is requested.
+		if (false !== $priority) {
+			// Only return true if the priority level actually exists and is removed.
+			if (isset($this->actions[$hook][$priority])) {
+				unset($this->actions[$hook][$priority]);
+				return true;
+			}
+			// If the priority doesn't exist, nothing was changed, so return false.
+			return false;
 		}
 
+		// If no priority is specified, remove the entire hook.
+		unset($this->actions[$hook]);
 		return true;
 	}
 }

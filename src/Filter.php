@@ -95,6 +95,9 @@ class Filter
 	/**
 	 * Removes a specific callback from a filter hook.
 	 *
+	 * Note: The callback must be the exact same reference (===) that was registered.
+	 * Anonymous functions or recreated callables will not match even if functionally identical.
+	 *
 	 * @since 1.1.0
 	 *
 	 * @param string   $hook     The name of the filter.
@@ -137,12 +140,19 @@ class Filter
 			return false;
 		}
 
-		if (false !== $priority && isset($this->filters[$hook][$priority])) {
-			unset($this->filters[$hook][$priority]);
-		} elseif (false === $priority) {
-			unset($this->filters[$hook]);
+		// A specific priority is requested.
+		if (false !== $priority) {
+			// Only return true if the priority level actually exists and is removed.
+			if (isset($this->filters[$hook][$priority])) {
+				unset($this->filters[$hook][$priority]);
+				return true;
+			}
+			// If the priority doesn't exist, nothing was changed, so return false.
+			return false;
 		}
 
+		// If no priority is specified, remove the entire hook.
+		unset($this->filters[$hook]);
 		return true;
 	}
 }
