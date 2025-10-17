@@ -53,3 +53,43 @@ test('it returns the original value if no filters are registered', function () {
 
 	expect($result)->toBe('initial');
 });
+
+test('it removes a specific filter', function () {
+	$callback1 = function ($value) {
+		return $value . '_one';
+	};
+	$callback2 = function ($value) {
+		return $value . '_two';
+	};
+
+	$this->filterManager->add('removable_filter', $callback1);
+	$this->filterManager->add('removable_filter', $callback2);
+
+	// Remove the first callback.
+	$removed = $this->filterManager->remove('removable_filter', $callback1);
+
+	$result = $this->filterManager->apply('removable_filter', 'initial');
+
+	expect($removed)->toBeTrue();
+	expect($result)->toBe('initial_two'); // Only callback2 should have run.
+});
+
+test('it removes all filters for a specific priority', function () {
+	$this->filterManager->add('remove_all_priority', fn($v) => $v . '_p10', 10);
+	$this->filterManager->add('remove_all_priority', fn($v) => $v . '_p20', 20);
+
+	$this->filterManager->removeAll('remove_all_priority', 10);
+	$result = $this->filterManager->apply('remove_all_priority', 'initial');
+
+	expect($result)->toBe('initial_p20');
+});
+
+test('it removes all filters for a hook', function () {
+	$this->filterManager->add('remove_all_hook', fn($v) => $v . '_p10', 10);
+	$this->filterManager->add('remove_all_hook', fn($v) => $v . '_p20', 20);
+
+	$this->filterManager->removeAll('remove_all_hook');
+	$result = $this->filterManager->apply('remove_all_hook', 'initial');
+
+	expect($result)->toBe('initial');
+});
