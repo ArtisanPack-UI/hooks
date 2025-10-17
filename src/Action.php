@@ -84,4 +84,69 @@ class Action
 			$callback(...$args);
 		}
 	}
+
+	/**
+	 * Removes a specific callback from an action hook.
+	 *
+	 * Note: The callback must be the exact same reference (===) that was registered.
+	 * Anonymous functions or recreated callables will not match even if functionally identical.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param string   $hook     The name of the action.
+	 * @param callable $callback The specific callback to remove.
+	 * @param int      $priority Optional. The priority of the callback. Default 10.
+	 * @return bool True on success, false on failure.
+	 */
+	public function remove(string $hook, callable $callback, int $priority = 10): bool
+	{
+		if (!isset($this->actions[$hook][$priority])) {
+			return false;
+		}
+
+		foreach ($this->actions[$hook][$priority] as $key => $registeredCallback) {
+			if ($registeredCallback === $callback) {
+				unset($this->actions[$hook][$priority][$key]);
+
+				// If the priority level is now empty, remove it to keep the array clean.
+				if (empty($this->actions[$hook][$priority])) {
+					unset($this->actions[$hook][$priority]);
+				}
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Removes all callbacks for a specific action hook or a specific priority.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param string    $hook     The name of the action.
+	 * @param int|false $priority Optional. A specific priority to remove. If false, all priorities are removed. Default false.
+	 * @return bool True if callbacks were removed, false otherwise.
+	 */
+	public function removeAll(string $hook, int|false $priority = false): bool
+	{
+		if (!isset($this->actions[$hook])) {
+			return false;
+		}
+
+		// A specific priority is requested.
+		if (false !== $priority) {
+			// Only return true if the priority level actually exists and is removed.
+			if (isset($this->actions[$hook][$priority])) {
+				unset($this->actions[$hook][$priority]);
+				return true;
+			}
+			// If the priority doesn't exist, nothing was changed, so return false.
+			return false;
+		}
+
+		// If no priority is specified, remove the entire hook.
+		unset($this->actions[$hook]);
+		return true;
+	}
 }

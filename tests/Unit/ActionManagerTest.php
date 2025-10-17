@@ -53,3 +53,55 @@ test('it passes arguments to actions', function () {
 
 	expect($result)->toBe('helloworld');
 });
+
+test('it removes a specific action', function () {
+	$result = 0;
+
+	$callback1 = function () use (&$result) {
+		$result += 5;
+	};
+	$callback2 = function () use (&$result) {
+		$result += 10;
+	};
+
+	$this->actionManager->add('removable_action', $callback1);
+	$this->actionManager->add('removable_action', $callback2);
+
+	// Remove the first callback.
+	$removed = $this->actionManager->remove('removable_action', $callback1);
+
+	$this->actionManager->do('removable_action');
+
+	expect($removed)->toBeTrue();
+	expect($result)->toBe(10); // Only callback2 should have run.
+});
+
+test('it removes all actions for a specific priority', function () {
+	$result = 0;
+	$this->actionManager->add('remove_all_priority', function () use (&$result) {
+		$result += 1;
+	}, 10);
+	$this->actionManager->add('remove_all_priority', function () use (&$result) {
+		$result += 10;
+	}, 20);
+
+	$this->actionManager->removeAll('remove_all_priority', 10);
+	$this->actionManager->do('remove_all_priority');
+
+	expect($result)->toBe(10);
+});
+
+test('it removes all actions for a hook', function () {
+	$result = 0;
+	$this->actionManager->add('remove_all_hook', function () use (&$result) {
+		$result += 1;
+	}, 10);
+	$this->actionManager->add('remove_all_hook', function () use (&$result) {
+		$result += 10;
+	}, 20);
+
+	$this->actionManager->removeAll('remove_all_hook');
+	$this->actionManager->do('remove_all_hook');
+
+	expect($result)->toBe(0);
+});

@@ -45,6 +45,41 @@ if (! function_exists('doAction')) {
 	}
 }
 
+if (! function_exists('removeAction')) {
+	/**
+	 * Removes a specific callback from an action hook.
+	 *
+	 * @since 1.1.0
+	 * @uses \ArtisanPackUI\Hooks\Facades\Action::remove()
+	 *
+	 * @param string   $hook     The name of the action.
+	 * @param callable $callback The specific callback to remove.
+	 * @param int      $priority Optional. The priority of the callback. Default 10.
+	 * @return bool True on success, false on failure.
+	 */
+	function removeAction(string $hook, callable $callback, int $priority = 10): bool
+	{
+		return Action::remove($hook, $callback, $priority);
+	}
+}
+
+if (! function_exists('removeAllActions')) {
+	/**
+	 * Removes all callbacks for a specific action hook or a specific priority.
+	 *
+	 * @since 1.1.0
+	 * @uses \ArtisanPackUI\Hooks\Facades\Action::removeAll()
+	 *
+	 * @param string    $hook     The name of the action.
+	 * @param int|false $priority Optional. A specific priority to remove. If false, all priorities are removed. Default false.
+	 * @return bool True if callbacks were removed, false otherwise.
+	 */
+	function removeAllActions(string $hook, int|false $priority = false): bool
+	{
+		return Action::removeAll($hook, $priority);
+	}
+}
+
 if (! function_exists('addFilter')) {
 	/**
 	 * Adds a callback to a specific filter hook.
@@ -77,5 +112,40 @@ if (! function_exists('applyFilters')) {
 	function applyFilters(string $hook, mixed $value, mixed ...$args): mixed
 	{
 		return Filter::apply($hook, $value, ...$args);
+	}
+}
+
+if (! function_exists('removeFilter')) {
+	/**
+	 * Removes a specific callback from a filter hook.
+	 *
+	 * @since 1.1.0
+	 * @uses \ArtisanPackUI\Hooks\Facades\Filter::remove()
+	 *
+	 * @param string   $hook     The name of the filter.
+	 * @param callable $callback The specific callback to remove.
+	 * @param int      $priority Optional. The priority of the callback. Default 10.
+	 * @return bool True on success, false on failure.
+	 */
+	function removeFilter(string $hook, callable $callback, int $priority = 10): bool
+	{
+		return Filter::remove($hook, $callback, $priority);
+	}
+}
+
+if (! function_exists('removeAllFilters')) {
+	/**
+	 * Removes all callbacks for a specific filter hook or a specific priority.
+	 *
+	 * @since 1.1.0
+	 * @uses \ArtisanPackUI\Hooks\Facades\Filter::removeAll()
+	 *
+	 * @param string    $hook     The name of the filter.
+	 * @param int|false $priority Optional. A specific priority to remove. If false, all priorities are removed. Default false.
+	 * @return bool True if callbacks were removed, false otherwise.
+	 */
+	function removeAllFilters(string $hook, int|false $priority = false): bool
+	{
+		return Filter::removeAll($hook, $priority);
 	}
 }

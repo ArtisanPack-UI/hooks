@@ -1,5 +1,20 @@
 # ArtisanPack UI Hooks Changelog
 
+## [1.1.0] - October 17, 2025
+
+### Added
+- Action removal APIs:
+  - `Action::remove(string $hook, callable $callback, int $priority = 10): bool`
+  - `Action::removeAll(string $hook, int|false $priority = false): bool`
+- Filter removal APIs:
+  - `Filter::remove(string $hook, callable $callback, int $priority = 10): bool`
+  - `Filter::removeAll(string $hook, int|false $priority = false): bool`
+- Helper functions:
+  - `removeAction()`, `removeAllActions()`, `removeFilter()`, `removeAllFilters()`
+- Facade methods documented: `Action::remove()`, `Action::removeAll()`, `Filter::remove()`, `Filter::removeAll()`
+- Unit tests for removal behaviors
+- Documentation updates with examples and API references
+
 ## [1.0.0] - October 16, 2025
 
 ### Added
