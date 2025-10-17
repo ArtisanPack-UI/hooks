@@ -91,4 +91,58 @@ class Filter
 
 		return $value;
 	}
+
+	/**
+	 * Removes a specific callback from a filter hook.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param string   $hook     The name of the filter.
+	 * @param callable $callback The specific callback to remove.
+	 * @param int      $priority Optional. The priority of the callback. Default 10.
+	 * @return bool True on success, false on failure.
+	 */
+	public function remove(string $hook, callable $callback, int $priority = 10): bool
+	{
+		if (!isset($this->filters[$hook][$priority])) {
+			return false;
+		}
+
+		foreach ($this->filters[$hook][$priority] as $key => $registeredCallback) {
+			if ($registeredCallback === $callback) {
+				unset($this->filters[$hook][$priority][$key]);
+
+				if (empty($this->filters[$hook][$priority])) {
+					unset($this->filters[$hook][$priority]);
+				}
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Removes all callbacks for a specific filter hook or a specific priority.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param string    $hook     The name of the filter.
+	 * @param int|false $priority Optional. A specific priority to remove. If false, all priorities are removed. Default false.
+	 * @return bool True if callbacks were removed, false otherwise.
+	 */
+	public function removeAll(string $hook, int|false $priority = false): bool
+	{
+		if (!isset($this->filters[$hook])) {
+			return false;
+		}
+
+		if (false !== $priority && isset($this->filters[$hook][$priority])) {
+			unset($this->filters[$hook][$priority]);
+		} elseif (false === $priority) {
+			unset($this->filters[$hook]);
+		}
+
+		return true;
+	}
 }

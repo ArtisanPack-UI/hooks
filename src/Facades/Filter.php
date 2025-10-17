@@ -4,12 +4,14 @@
  *
  * Provides a static-like interface to the Filter service.
  *
- * @package    ArtisanPackUI\Hooks
- * @subpackage ArtisanPackUI\Hooks\Facades
  * @since      1.0.0
  *
  * @method static void add(string $hook, callable $callback, int $priority = 10)
  * @method static mixed apply(string $hook, mixed $value, ...$args)
+ * @method static bool remove(string $hook, callable $callback, int $priority = 10 )
+ * @method static bool removeAll( string $hook, int|false $priority = false )
+ * @subpackage ArtisanPackUI\Hooks\Facades
+ * @package    ArtisanPackUI\Hooks
  */
 
 namespace ArtisanPackUI\Hooks\Facades;

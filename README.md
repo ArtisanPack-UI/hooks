@@ -23,7 +23,7 @@ This package lets you register callbacks on named hooks (actions) and filter val
 
 ## Features
 - Simple API for registering and dispatching actions and filters
-- Helper functions: `addAction`, `doAction`, `addFilter`, `applyFilters`
+- Helper functions: `addAction`, `doAction`, `removeAction` (since 1.1.0), `removeAllActions` (since 1.1.0), `addFilter`, `applyFilters`, `removeFilter` (since 1.1.0), `removeAllFilters` (since 1.1.0)
 - Static Facades for Laravel: `Action` and `Filter`
 - Blade directives: `@action` and `@filter`
 - Runs callbacks in predictable priority order (lower numbers first)
@@ -72,6 +72,25 @@ addAction('order.placed', fn () => logger('default priority next')); // 10
 addAction('order.placed', fn () => logger('higher number last'), 20);
 ```
 
+#### Removing action callbacks (since 1.1.0)
+```php
+use function removeAction;
+use function removeAllActions;
+
+$callback = fn () => logger('temp');
+
+addAction('order.placed', $callback);
+
+// Remove a specific callback
+$removed = removeAction('order.placed', $callback); // true
+
+// Remove all callbacks at a given priority
+removeAllActions('order.placed', 20);
+
+// Remove all callbacks for the hook
+removeAllActions('order.placed');
+```
+
 ### Filters
 Filters pass a value through one or more callbacks. Each callback receives the current value as the first argument and must return the (possibly modified) value.
 
@@ -84,6 +103,25 @@ addFilter('price.display', function (string $price, string $currency) {
 });
 
 $display = applyFilters('price.display', '49.00', 'USD');
+```
+
+#### Removing filter callbacks (since 1.1.0)
+```php
+use function removeFilter;
+use function removeAllFilters;
+
+$fn = fn (string $v) => strtoupper($v);
+
+addFilter('text.process', $fn, 20);
+
+// Remove a specific callback
+$ok = removeFilter('text.process', $fn); // true
+
+// Remove all callbacks at a given priority
+removeAllFilters('text.process', 20);
+
+// Remove all callbacks for the hook
+removeAllFilters('text.process');
 ```
 
 ## Priorities and execution order
