@@ -1,10 +1,11 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Base Test Case
  *
  * Provides the basic application bootstrapping required for package testing.
  *
- * @package    Tests
  * @since      1.0.0
  */
 
@@ -21,40 +22,40 @@ use Orchestra\Testbench\TestCase as Orchestra;
  */
 class TestCase extends Orchestra
 {
-	/**
-	 * Setup the test environment.
-	 *
-	 * This method is called before each test.
-	 *
-	 * @since 1.0.0
-	 * @return void
-	 */
-	protected function setUp(): void
-	{
-		// This line is absolutely essential. It tells Orchestra Testbench
-		// to build the temporary Laravel application and create $this->app.
-		parent::setUp();
-		
-		// Manually register singletons to ensure they work correctly in tests
-		$this->app->singleton(\ArtisanPackUI\Hooks\Action::class);
-		$this->app->singleton(\ArtisanPackUI\Hooks\Filter::class);
-	}
+    /**
+     * Setup the test environment.
+     *
+     * This method is called before each test.
+     *
+     * @since 1.0.0
+     */
+    protected function setUp(): void
+    {
+        // This line is absolutely essential. It tells Orchestra Testbench
+        // to build the temporary Laravel application and create $this->app.
+        parent::setUp();
 
-	/**
-	 * Get package providers.
-	 *
-	 * Tells Testbench which service providers to load for the tests.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param \Illuminate\Foundation\Application $app The application instance.
-	 * @return array<int, class-string>
-	 */
-	protected function getPackageProviders($app): array
-	{
-		return [
-			HooksServiceProvider::class,
-			BladeDirectiveServiceProvider::class,
-		];
-	}
+        // Manually register singletons to ensure they work correctly in tests
+        $this->app->singleton(\ArtisanPackUI\Hooks\Action::class);
+        $this->app->singleton(\ArtisanPackUI\Hooks\Filter::class);
+    }
+
+    /**
+     * Get package providers.
+     *
+     * Tells Testbench which service providers to load for the tests.
+     *
+     * @since 1.0.0
+     *
+     * @param  \Illuminate\Foundation\Application  $app  The application instance.
+     *
+     * @return array<int, class-string>
+     */
+    protected function getPackageProviders($app): array
+    {
+        return [
+            HooksServiceProvider::class,
+            BladeDirectiveServiceProvider::class,
+        ];
+    }
 }

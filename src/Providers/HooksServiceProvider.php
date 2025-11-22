@@ -1,11 +1,11 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Hooks Service Provider
  *
  * Registers the Action and Filter singletons for the Hooks package.
  *
- * @package    ArtisanPackUI\Hooks
- * @subpackage ArtisanPackUI\Hooks\Providers
  * @since      1.0.0
  */
 
@@ -22,24 +22,23 @@ use Illuminate\Support\ServiceProvider;
  */
 class HooksServiceProvider extends ServiceProvider
 {
-	/**
-	 * Register any application services.
-	 *
-	 * Binds the Action and Filter managers into the container as singletons.
-	 *
-	 * @since 1.0.0
-	 * @return void
-	 */
-	public function register(): void
-	{
-		// Register Action as a singleton.
-		$this->app->singleton(Action::class, function ($app) {
-			return new Action($app);
-		});
+    /**
+     * Register any application services.
+     *
+     * Binds the Action and Filter managers into the container as singletons.
+     *
+     * @since 1.0.0
+     */
+    public function register(): void
+    {
+        // Register Action as a singleton.
+        $this->app->singleton(Action::class, function ($app) {
+            return new Action($app);
+        });
 
-		// Register Filter as a singleton.
-		$this->app->singleton(Filter::class, function ($app) {
-			return new Filter($app);
-		});
-	}
+        // Register Filter as a singleton.
+        $this->app->singleton(Filter::class, function ($app) {
+            return new Filter($app);
+        });
+    }
 }
