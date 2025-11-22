@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Action Facade
  *
@@ -10,8 +12,6 @@
  * @method static void do(string $hook, ...$args)
  * @method static bool remove(string $hook, callable $callback, int $priority = 10 )
  * @method static bool removeAll( string $hook, int|false $priority = false )
- * @subpackage ArtisanPackUI\Hooks\Facades
- * @package    ArtisanPackUI\Hooks
  */
 
 namespace ArtisanPackUI\Hooks\Facades;
@@ -26,15 +26,13 @@ use Illuminate\Support\Facades\Facade;
  */
 class Action extends Facade
 {
-	/**
-	 * Get the registered name of the component.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	protected static function getFacadeAccessor(): string
-	{
-		return ActionManager::class;
-	}
+    /**
+     * Get the registered name of the component.
+     *
+     * @since 1.0.0
+     */
+    protected static function getFacadeAccessor(): string
+    {
+        return ActionManager::class;
+    }
 }
