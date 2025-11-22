@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(composer show brianium/paratest v7.14.2 --all)",
+      "Bash(composer install:*)"
     ],
     "deny": [],
     "ask": []

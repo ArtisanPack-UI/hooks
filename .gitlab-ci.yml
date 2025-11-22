@@ -28,7 +28,7 @@ build:vendors:
       files:
         - composer.lock
     policy: pull-push
-  image: composer:2
+  image: composer:2.10.2-php8.4
   script:
     - composer install --no-interaction --prefer-dist --optimize-autoloader
 
@@ -72,6 +72,24 @@ code-style:
   allow_failure: true
   script:
     - ./vendor/bin/phpcs --standard=ArtisanPackUIStandard src
+
+pint:
+  stage: code-style
+  dependencies:
+    - build:vendors
+  only:
+    refs:
+      - merge_requests
+      - push
+  cache:
+    key:
+      files:
+        - composer.lock
+    policy: pull
+  image: php:8.2
+  allow_failure: true
+  script:
+    - ./vendor/bin/pint --test
 
 # Job 1: Prepare the release description from CHANGELOG.md
 prepare_release_description:
