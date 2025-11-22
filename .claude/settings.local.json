@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd:*)",
+      "Bash(composer show brianium/paratest v7.14.2 --all)",
+      "Bash(composer install:*)",
+      "Bash(git add:*)",
+      "Bash(php pint-setup.php:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
