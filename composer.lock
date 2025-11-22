@@ -5904,6 +5904,67 @@
             "time": "2025-11-21T15:27:31+00:00"
         },
         {
+            "name": "artisanpack-ui/code-style-pint",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/jacob-martella-web-design/artisanpack-ui/artisanpack-ui-code-style-pint.git",
+                "reference": "198a9e02ea022c17c2a80692cf4423ecf28b43ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/jacob-martella-web-design%2Fartisanpack-ui%2Fartisanpack-ui-code-style-pint/repository/archive.zip?sha=198a9e02ea022c17c2a80692cf4423ecf28b43ee",
+                "reference": "198a9e02ea022c17c2a80692cf4423ecf28b43ee",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^10.0|^11.0|^12.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "orchestra/testbench": "^9.0|^10.0",
+                "pestphp/pest": "^3.8",
+                "pestphp/pest-plugin-laravel": "^3.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ArtisanPackUI\\CodeStylePint\\CodeStylePintServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ArtisanPackUI\\CodeStylePint\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Jacob Martella",
+                    "email": "me@jacobmartella.com"
+                }
+            ],
+            "description": "Laravel Pint preset for ArtisanPack UI code standards",
+            "keywords": [
+                "Pint",
+                "artisanpack",
+                "code-style",
+                "laravel",
+                "php-cs-fixer"
+            ],
+            "support": {
+                "issues": "https://gitlab.com/jacob-martella-web-design/artisanpack-ui/artisanpack-ui-code-style-pint/-/issues",
+                "source": "https://gitlab.com/jacob-martella-web-design/artisanpack-ui/artisanpack-ui-code-style-pint/-/tree/v1.0.0"
+            },
+            "time": "2025-11-21T15:27:31+00:00"
+        },
+        {
             "name": "brianium/paratest",
             "version": "v7.8.4",
             "source": {

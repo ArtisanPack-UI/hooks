@@ -28,9 +28,11 @@ build:vendors:
       files:
         - composer.lock
     policy: pull-push
-  image: composer:2
+  image: php:8.4
+  before_script:
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   script:
-    - composer install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-req=php
+    - composer install --no-interaction --prefer-dist --optimize-autoloader
 
 tests:
   stage: test
@@ -45,7 +47,7 @@ tests:
       files:
         - composer.lock
     policy: pull
-  image: php:8.2
+  image: php:8.4
   before_script:
     - apt-get update -yqq
     - apt-get install -yqq libpng-dev libjpeg-dev libfreetype6-dev
@@ -68,7 +70,7 @@ code-style:
       files:
         - composer.lock
     policy: pull
-  image: php:8.2
+  image: php:8.4
   allow_failure: true
   script:
     - ./vendor/bin/phpcs --standard=ArtisanPackUIStandard src
@@ -86,7 +88,7 @@ pint:
       files:
         - composer.lock
     policy: pull
-  image: php:8.2
+  image: php:8.4
   allow_failure: true
   script:
     - ./vendor/bin/pint --test
