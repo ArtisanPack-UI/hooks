@@ -28,8 +28,9 @@ build:vendors:
       files:
         - composer.lock
     policy: pull-push
-  image: composer:2.10.2-php8.4
+  image: composer:2
   script:
+    - composer config platform.php 8.4.0
     - composer install --no-interaction --prefer-dist --optimize-autoloader
 
 tests:
