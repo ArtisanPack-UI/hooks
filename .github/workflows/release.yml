@@ -60,8 +60,9 @@ jobs:
 
       - name: Extract release notes from CHANGELOG
         id: changelog
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
-          VERSION=${{ steps.version.outputs.version }}
           echo "Extracting notes for version $VERSION"
 
           if [ ! -f "CHANGELOG.md" ]; then
