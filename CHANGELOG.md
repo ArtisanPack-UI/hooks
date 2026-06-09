@@ -1,5 +1,20 @@
 # ArtisanPack UI Hooks Changelog
 
+## [1.2.1] - June 8, 2026
+
+### Added
+- Laravel 13 support
+  - `illuminate/support` constraint now accepts `^13.0`
+  - PHP 8.3+ is required when installing on Laravel 13 (enforced by Laravel itself; PHP 8.2 remains supported on Laravel 11/12)
+
+### Changed
+- Aligned `illuminate/support` constraint to `^11.0|^12.0|^13.0` to match the actively tested matrix
+- Updated supported Laravel versions in README to 11.x, 12.x, and 13.x
+
+### Removed
+- Dropped explicit declaration of support for Laravel < 11
+  - The previous `>=5.3` constraint was overly permissive; the package was only ever tested against Laravel 10/11. Users on Laravel 10 or earlier should pin to `^1.2.0`.
+
 ## [1.2.0] - November 22, 2025
 
 ### Added
