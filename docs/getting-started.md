@@ -7,8 +7,8 @@ Welcome to ArtisanPack UI Hooks. This guide will help you get up and running qui
 See also: [[Actions]], [[Filters]], and [[Blade Directives]].
 
 ## Requirements
-- PHP 8.2+
-- Laravel (tested with 10.x and 11.x)
+- PHP 8.2+ (PHP 8.3+ required when using Laravel 13)
+- Laravel 11.x, 12.x, or 13.x
 
 ## Installation
 Install via Composer:
