@@ -3,7 +3,7 @@
   "description": "WordPress-style actions and filters for Laravel, with Blade directives and helper functions.",
   "type": "library",
   "license": "MIT",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "autoload": {
     "psr-4": {
       "ArtisanPackUI\\Hooks\\": "src/"
