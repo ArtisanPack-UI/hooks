@@ -1,5 +1,23 @@
 # ArtisanPack UI Hooks Changelog
 
+## [1.3.0] - July 20, 2026
+
+### Added
+- `HookDeprecations` primitive for backwards-compatible hook renaming
+  - `deprecateHook(string $old, string $new): void` helper registers a rename in one line
+  - `Action` and `Filter` transparently route `add()`/`remove()`/`removeAll()` through the alias map
+  - `do()` / `apply()` fan out across canonical and alias buckets so pre-deprecation subscribers still fire
+  - Callbacks registered under both the old and canonical names are de-duplicated by identity within a single dispatch (closures, invokable objects, `[$obj, 'method']`, `[Class::class, 'staticMethod']`, and string function names all key correctly). Deliberate double-registrations within a single bucket still fire twice
+  - Stable insertion-order tie-break within a priority is preserved via a monotonic sequence counter, even when a callback is routed through an alias bucket
+  - Cycles are rejected: `deprecateHook('a', 'b')` followed by `deprecateHook('b', 'a')` throws `InvalidArgumentException` instead of silently creating a `b → b` self-alias
+  - Deprecation notices log only on dispatch (`do`/`apply`), never on `add`/`remove` — so the log entry is anchored to real hook use, not to boot-time registration
+  - Log gate reads from the published `config/artisanpack/hooks.php` (`deprecation_level` key), falling back to `HOOKS_DEPRECATION_LEVEL` env for zero-config use. Any PSR-3 level (`emergency`, `alert`, `critical`, `error`, `warning`, `notice`, `info`, `debug`) is accepted; `off` suppresses the log
+  - "Log once per unique alias" is scoped per request, not per process: the service provider resets the dedup on Octane `RequestReceived` and Queue `JobProcessing` so long-lived workers do not swallow every notice after the first request/job
+  - `HookDeprecations` is container-resolvable via `app(HookDeprecations::class)` — no new Facade or helper surface beyond `deprecateHook()`
+- Config file at `config/hooks.php`, publishable via `php artisan vendor:publish --tag=hooks-config`
+- `src/Concerns/ManagesHookBuckets.php` trait shared by `Action` and `Filter`, so bucket / alias / dedup / removal logic lives in one place instead of duplicated across both classes
+- README section documenting the naming convention and shared cross-package hooks (`ap.google.scopes`, `ap.icons.registerIconSets`)
+
 ## [1.2.1] - June 8, 2026
 
 ### Added

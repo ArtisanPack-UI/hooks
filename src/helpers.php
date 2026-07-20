@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 use ArtisanPackUI\Hooks\Facades\Action;
 use ArtisanPackUI\Hooks\Facades\Filter;
+use ArtisanPackUI\Hooks\HookDeprecations;
 
 if (! function_exists('addAction')) {
     /**
@@ -161,5 +162,27 @@ if (! function_exists('removeAllFilters')) {
     function removeAllFilters(string $hook, int|false $priority = false): bool
     {
         return Filter::removeAll($hook, $priority);
+    }
+}
+
+if (! function_exists('deprecateHook')) {
+    /**
+     * Register a hook rename so old-name subscribers continue to fire on
+     * the canonical hook.
+     *
+     * A deprecation notice is logged the first time an alias is resolved
+     * this process. Logging is env-gated via HOOKS_DEPRECATION_LEVEL
+     * (warning|info|debug|off, default info).
+     *
+     * @since 1.3.0
+     *
+     * @uses \ArtisanPackUI\Hooks\HookDeprecations::alias()
+     *
+     * @param  string  $old  The previous hook name.
+     * @param  string  $new  The canonical hook name.
+     */
+    function deprecateHook(string $old, string $new): void
+    {
+        app(HookDeprecations::class)->alias($old, $new);
     }
 }
