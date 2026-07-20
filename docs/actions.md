@@ -11,6 +11,7 @@ See also: [[Filters]] and [[Priorities and Execution Order]].
 - doAction(string $hook, mixed ...$args): void
 - removeAction(string $hook, callable $callback, int $priority = 10): bool  (since 1.1.0)
 - removeAllActions(string $hook, int|false $priority = false): bool  (since 1.1.0)
+- deprecateHook(string $old, string $new): void  (since 1.3.0) — see [[Hook Naming and Deprecations]]
 
 ## Usage
 
