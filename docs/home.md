@@ -14,6 +14,7 @@ Use the navigation below to explore topics. Links use the GitLab wiki page style
 - [[Priorities and Execution Order]]
 - [[Facades]]
 - [[Blade Directives]]
+- [[Hook Naming and Deprecations]]
 - [[Testing]]
 - [[FAQ]]
 - [[Security]]
