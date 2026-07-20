@@ -15,6 +15,7 @@ This package lets you register callbacks on named hooks (actions) and filter val
 - Priorities and execution order
 - Using Facades
 - Blade directives
+- Hook naming and deprecations (since 1.3.0)
 - Testing locally
 - Contributing
 - Security
@@ -23,7 +24,7 @@ This package lets you register callbacks on named hooks (actions) and filter val
 
 ## Features
 - Simple API for registering and dispatching actions and filters
-- Helper functions: `addAction`, `doAction`, `removeAction` (since 1.1.0), `removeAllActions` (since 1.1.0), `addFilter`, `applyFilters`, `removeFilter` (since 1.1.0), `removeAllFilters` (since 1.1.0)
+- Helper functions: `addAction`, `doAction`, `removeAction` (since 1.1.0), `removeAllActions` (since 1.1.0), `addFilter`, `applyFilters`, `removeFilter` (since 1.1.0), `removeAllFilters` (since 1.1.0), `deprecateHook` (since 1.3.0)
 - Static Facades for Laravel: `Action` and `Filter`
 - Blade directives: `@action` and `@filter`
 - Runs callbacks in predictable priority order (lower numbers first)
@@ -155,6 +156,40 @@ You can trigger actions and apply filters directly within Blade views.
 
 - `@action('hook', $args...)` calls `doAction('hook', $args...)`.
 - `@filter('hook', $value, $args...)` echoes `applyFilters('hook', $value, $args...)`.
+
+## Hook naming and deprecations (since 1.3.0)
+
+Hook names should be namespaced with dot notation and lower camelCase segments — for example, `order.placed`, `user.registered`, `ap.icons.registerIconSets`. The `ap.<domain>.<event>` prefix is reserved for cross-package hooks that any ArtisanPack UI package (or downstream app) may listen to. Two of these are intentionally shared today:
+
+- `ap.google.scopes` — filter for augmenting the requested Google OAuth scopes.
+- `ap.icons.registerIconSets` — filter for registering additional icon sets.
+
+If you rename a hook you have already shipped, register the old name as an alias so existing subscribers keep firing:
+
+```php
+deprecateHook('order.placed', 'order.created');
+```
+
+After that call:
+
+- `addAction('order.placed', $fn)` transparently attaches to `order.created`.
+- `doAction('order.placed')` fires every callback bound to either name.
+- Any callback registered under `order.placed` **before** the `deprecateHook` call still fires when `order.created` is dispatched (belt-and-suspenders migration).
+- A callback registered under **both** names (before *and* after the rename) fires **once**, not twice — the dispatcher deduplicates across canonical + alias buckets by identity. Deliberately double-registering under the *same* name still fires twice (pre-1.3 behavior).
+- Insertion order within a priority is preserved regardless of which bucket a callback lives in.
+- The first time each unique alias is resolved this **request** (not process — see Octane note below), a deprecation notice is logged. Registrations (`add`/`remove`) never log; only dispatch (`do`/`apply`) does, so the notice is anchored to real hook use.
+- Cycles are rejected: `deprecateHook('a', 'b')` followed by `deprecateHook('b', 'a')` throws `InvalidArgumentException`.
+
+Configure the log level in `config/artisanpack/hooks.php` (publish with `php artisan vendor:publish --tag=hooks-config`) via the `deprecation_level` key, or set `HOOKS_DEPRECATION_LEVEL` in `.env`:
+
+| Value                                             | Behavior                                 |
+|---------------------------------------------------|------------------------------------------|
+| any PSR-3 level (`emergency`…`debug`; default `info`) | log at that level                    |
+| `off`                                             | suppress the deprecation log             |
+
+**Octane / queue workers.** The "log once per unique alias" dedup is scoped per request. The service provider clears it on Octane `RequestReceived` and Queue `JobProcessing` events so long-lived workers do not swallow every notice after the first request/job.
+
+`HookDeprecations` is container-resolvable via `app(HookDeprecations::class)` if you need direct access to `alias()`, `resolve()`, `resolveSilent()`, `aliasesFor()`, `hasAliases()`, or `resetLogState()`; there is intentionally no dedicated Facade.
 
 ## Testing locally
 This repository uses Pest. Run the test suite with:

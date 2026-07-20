@@ -12,15 +12,22 @@ declare(strict_types=1);
 
 namespace ArtisanPackUI\Hooks;
 
+use ArtisanPackUI\Hooks\Concerns\ManagesHookBuckets;
 use Illuminate\Contracts\Container\Container;
 
 /**
  * Manages the registration and execution of action hooks.
  *
+ * Storage, alias resolution, add/remove/removeAll and the dedup-across-
+ * buckets logic live in {@see ManagesHookBuckets} so Action and Filter
+ * cannot drift on shared bookkeeping.
+ *
  * @since 1.0.0
  */
 class Action
 {
+    use ManagesHookBuckets;
+
     /**
      * The application container instance.
      *
@@ -29,36 +36,17 @@ class Action
     protected Container $app;
 
     /**
-     * Registered action hooks.
-     *
-     * @since 1.0.0
-     */
-    protected array $actions = [];
-
-    /**
      * Constructor.
      *
      * @since 1.0.0
      *
      * @param  Container  $app  The application container.
+     * @param  HookDeprecations|null  $deprecations  Optional deprecations manager.
      */
-    public function __construct(Container $app)
+    public function __construct(Container $app, ?HookDeprecations $deprecations = null)
     {
-        $this->app = $app;
-    }
-
-    /**
-     * Adds a callback to a specific action hook.
-     *
-     * @since 1.0.0
-     *
-     * @param  string  $hook  The name of the action.
-     * @param  callable  $callback  The callback to be executed.
-     * @param  int  $priority  Optional. The priority of the callback. Default 10.
-     */
-    public function add(string $hook, callable $callback, int $priority = 10): void
-    {
-        $this->actions[$hook][$priority][] = $callback;
+        $this->app          = $app;
+        $this->deprecations = $deprecations;
     }
 
     /**
@@ -71,86 +59,8 @@ class Action
      */
     public function do(string $hook, mixed ...$args): void
     {
-        if (! isset($this->actions[$hook])) {
-            return;
-        }
-
-        ksort($this->actions[$hook]);
-        $callbacks = array_merge(...$this->actions[$hook]);
-
-        foreach ($callbacks as $callback) {
+        foreach ($this->collectForDispatch($hook) as $callback) {
             $callback(...$args);
         }
-    }
-
-    /**
-     * Removes a specific callback from an action hook.
-     *
-     * Note: The callback must be the exact same reference (===) that was registered.
-     * Anonymous functions or recreated callables will not match even if functionally identical.
-     *
-     * @since 1.1.0
-     *
-     * @param  string  $hook  The name of the action.
-     * @param  callable  $callback  The specific callback to remove.
-     * @param  int  $priority  Optional. The priority of the callback. Default 10.
-     *
-     * @return bool True on success, false on failure.
-     */
-    public function remove(string $hook, callable $callback, int $priority = 10): bool
-    {
-        if (! isset($this->actions[$hook][$priority])) {
-            return false;
-        }
-
-        foreach ($this->actions[$hook][$priority] as $key => $registeredCallback) {
-            if ($registeredCallback === $callback) {
-                unset($this->actions[$hook][$priority][$key]);
-
-                // If the priority level is now empty, remove it to keep the array clean.
-                if (empty($this->actions[$hook][$priority])) {
-                    unset($this->actions[$hook][$priority]);
-                }
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Removes all callbacks for a specific action hook or a specific priority.
-     *
-     * @since 1.1.0
-     *
-     * @param  string  $hook  The name of the action.
-     * @param  false|int  $priority  Optional. A specific priority to remove. If false, all priorities are removed. Default false.
-     *
-     * @return bool True if callbacks were removed, false otherwise.
-     */
-    public function removeAll(string $hook, int|false $priority = false): bool
-    {
-        if (! isset($this->actions[$hook])) {
-            return false;
-        }
-
-        // A specific priority is requested.
-        if (false !== $priority) {
-            // Only return true if the priority level actually exists and is removed.
-            if (isset($this->actions[$hook][$priority])) {
-                unset($this->actions[$hook][$priority]);
-
-                return true;
-            }
-
-            // If the priority doesn't exist, nothing was changed, so return false.
-            return false;
-        }
-
-        // If no priority is specified, remove the entire hook.
-        unset($this->actions[$hook]);
-
-        return true;
     }
 }
